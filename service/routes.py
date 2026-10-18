@@ -1,8 +1,15 @@
 from flask import Flask, jsonify
 from flask import request
+from flask_talisman import Talisman
+from flask_cors import CORS
 
 app = Flask(__name__)
-
+Talisman(
+    app,
+    force_https=False,
+    content_security_policy=None
+)
+CORS(app)
 # Temporary in-memory customer accounts
 accounts = {}
 
@@ -16,6 +23,7 @@ def get_account(account_id):
         return jsonify({"error": "Account not found"}), 404
 
     return jsonify(account), 200
+
 
 @app.route("/accounts/<int:account_id>", methods=["PUT"])
 def update_account(account_id):
@@ -31,7 +39,8 @@ def update_account(account_id):
         return jsonify({"error": "Invalid request body"}), 400
 
     account.update(data)
-    return jsonify(account), 200    
+    return jsonify(account), 200
+
 
 @app.route("/accounts/<int:account_id>", methods=["DELETE"])
 def delete_account(account_id):
@@ -43,6 +52,7 @@ def delete_account(account_id):
 
     del accounts[account_id]
     return "", 204
+
 
 @app.route("/accounts", methods=["GET"])
 def list_accounts():

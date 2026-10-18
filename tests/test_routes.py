@@ -28,6 +28,7 @@ class TestCustomerAccounts(unittest.TestCase):
             response.json["email"],
             "alice@example.com"
         )
+
     def test_update_existing_account(self):
         accounts[1] = {
             "id": 1,
@@ -49,6 +50,7 @@ class TestCustomerAccounts(unittest.TestCase):
             response.json["email"],
             "alice.smith@example.com"
         )
+
     def test_update_account_not_found(self):
         response = self.client.put(
             "/accounts/999",
@@ -60,6 +62,7 @@ class TestCustomerAccounts(unittest.TestCase):
             response.json["error"],
             "Account not found"
         )
+
     def test_delete_existing_account(self):
         accounts[1] = {
             "id": 1,
@@ -80,6 +83,7 @@ class TestCustomerAccounts(unittest.TestCase):
             response.json["error"],
             "Account not found"
         )
+
     def test_list_accounts(self):
         accounts[1] = {
             "id": 1,
@@ -104,6 +108,7 @@ class TestCustomerAccounts(unittest.TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json, [])
+
     def test_update_account_empty_body(self):
         accounts[1] = {
             "id": 1,
@@ -133,5 +138,7 @@ class TestCustomerAccounts(unittest.TestCase):
         )
 
         self.assertEqual(response.status_code, 400)
+
+
 if __name__ == "__main__":
     unittest.main()
