@@ -17,6 +17,7 @@ def get_account(account_id):
 
     return jsonify(account), 200
 
+
 @app.route("/accounts/<int:account_id>", methods=["PUT"])
 def update_account(account_id):
     """Update an existing customer account."""
@@ -31,7 +32,8 @@ def update_account(account_id):
         return jsonify({"error": "Invalid request body"}), 400
 
     account.update(data)
-    return jsonify(account), 200    
+    return jsonify(account), 200
+
 
 @app.route("/accounts/<int:account_id>", methods=["DELETE"])
 def delete_account(account_id):
@@ -43,6 +45,7 @@ def delete_account(account_id):
 
     del accounts[account_id]
     return "", 204
+
 
 @app.route("/accounts", methods=["GET"])
 def list_accounts():

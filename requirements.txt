@@ -1,3 +1,5 @@
 Flask
 nose
 coverage
+flake8
+autopep8
