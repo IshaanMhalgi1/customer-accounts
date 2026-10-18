@@ -1,0 +1,45 @@
+
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: test-customer-accounts
+spec:
+  steps:
+    - name: clone-and-test
+      image: python:3.11-slim
+      workingDir: /workspace
+      script: |
+        #!/bin/sh
+        set -eu
+
+        apt-get update
+        apt-get install -y --no-install-recommends git
+        rm -rf /tmp/customer-accounts
+        git clone --depth 1 --branch sprint-3 \
+          https://github.com/IshaanMhalgi1/customer-accounts.git \
+          /tmp/customer-accounts
+
+        cd /tmp/customer-accounts
+        pip install --no-cache-dir -r requirements.txt
+        pip install --no-cache-dir flake8 nose coverage
+
+        echo "=== Running Flake8 ==="
+        flake8 service
+
+        echo "=== Running unit tests ==="
+        PYTHONPATH=. nosetests
+
+        echo "=== Checking coverage ==="
+        PYTHONPATH=. coverage run --source=service \
+          -m nose
+        coverage report --fail-under=95
+---
+apiVersion: tekton.dev/v1
+kind: Pipeline
+metadata:
+  name: customer-accounts-ci
+spec:
+  tasks:
+    - name: test
+      taskRef:
+        name: test-customer-accounts
