@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customer-accounts
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: customer-accounts
+  template:
+    metadata:
+      labels:
+        app: customer-accounts
+    spec:
+      containers:
+        - name: api
+          image: customer-accounts:1.1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5000
+          env:
+            - name: DATABASE_URL
+              value: "postgresql://accounts_user:accounts_dev_password@accounts-db:5432/customer_accounts"
+          readinessProbe:
+            httpGet:
+              path: /accounts
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /accounts
+              port: 5000
+            initialDelaySeconds: 15
+            periodSeconds: 20
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: customer-accounts
+spec:
+  selector:
+    app: customer-accounts
+  ports:
+    - port: 5000
+      targetPort: 5000
+  type: ClusterIP

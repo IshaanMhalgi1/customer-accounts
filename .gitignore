@@ -5,3 +5,9 @@ __pycache__/
 *.py[cod]
 .pytest_cache/
 "@ | Set-Content .gitignore
+# Python bytecode and cache
+__pycache__/
+*.py[cod]
+
+# Local Docker image archives
+*.tar
