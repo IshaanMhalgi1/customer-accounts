@@ -2,7 +2,7 @@ name: Customer Accounts CI
 
 on:
   push:
-    branches: [main, sprint-2]
+    branches: [main, sprint-2, sprint-3]
   pull_request:
     branches: [main]
 
