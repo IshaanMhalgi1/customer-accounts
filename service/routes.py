@@ -1,8 +1,15 @@
 from flask import Flask, jsonify
 from flask import request
+from flask_talisman import Talisman
+from flask_cors import CORS
 
 app = Flask(__name__)
-
+Talisman(
+    app,
+    force_https=False,
+    content_security_policy=None
+)
+CORS(app)
 # Temporary in-memory customer accounts
 accounts = {}
 
